@@ -1,0 +1,31 @@
+package com.employee.controller;
+
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.employee.entity.Employee;
+import com.employee.service.EmployeeService;
+
+
+@RestController
+@RequestMapping("/employee")
+public class EmployeeController {
+
+	@Autowired
+	private EmployeeService service;
+	
+	//POST API
+	@PostMapping
+	public Employee addEmployee(@RequestBody Employee employee) {
+		return service.saveEmployee(employee);
+	}
+	
+	//GET API
+	@GetMapping
+	public List<Employee> getEmployees(){
+		return service.getAllEmployee();
+	}
+
+}
