@@ -1,6 +1,7 @@
 package com.employee.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name="employees")
@@ -9,13 +10,19 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-
+	
+	
+	//Not blank is type of validation
+	@NotBlank(message="Name is required")
 	private String name;
 	
+	@NotBlank(message="Role is required")
 	private String role;
 	
+	@NotBlank(message="Location is required")
 	private String location;
 	
+	@NotBlank(message="Salary is required")
 	private String salary;
 	
 	public Long getId() {
