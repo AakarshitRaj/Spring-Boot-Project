@@ -21,5 +21,29 @@ public class EmployeeService {
 	public List<Employee> getAllEmployee(){
 		return repository.findAll();
 	}
+	//Get Employee By Id
+	public Employee getEmployeeById(Long id) {
+		return repository.findById(id).orElse(null);
+	}
+	//Update Employee
+	public Employee updateEmployee(Long id,Employee employee) {
+		Employee existingEmployee = repository.findById(id).orElse(null);
+		
+		if(existingEmployee!=null) {
+			  existingEmployee.setName(employee.getName());
+		        existingEmployee.setRole(employee.getRole());
+		        existingEmployee.setLocation(employee.getLocation());
+		        existingEmployee.setSalary(employee.getSalary());
+
+		        return repository.save(existingEmployee);
+		    }
+
+		    return null;
+	}
+	
+	//Delete Employee
+	public void deleteEmployeeById(Long id) {
+		repository.deleteById(id);
+	}
 
 }

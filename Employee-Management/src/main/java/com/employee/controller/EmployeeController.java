@@ -27,5 +27,19 @@ public class EmployeeController {
 	public List<Employee> getEmployees(){
 		return service.getAllEmployee();
 	}
+	@GetMapping("/{id}")
+	public Employee getEmployeeById(@PathVariable Long id) {
+		return service.getEmployeeById(id);
+	}
+	@PutMapping("/{id}")
+	public Employee updateEmployeeById(@PathVariable Long id,@RequestBody Employee employee) {
+		return service.updateEmployee(id,employee);
+	}
+	
+	@DeleteMapping("/{id}")
+	public String deleteEmployeeById(@PathVariable Long id) {
+		service.deleteEmployeeById(id);
+		return "Deleted Successfully";
+	}
 
 }
