@@ -3,6 +3,8 @@ package com.employee.controller;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+//for pagination
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.employee.entity.Employee;
@@ -53,6 +55,12 @@ public class EmployeeController {
 	@GetMapping("/role/{role}")
 	public List<Employee> getEmployeeByRole(@PathVariable String role){
 		return service.getEmployeeByRole(role);
+	}
+	
+	//Pagination logic
+	@GetMapping("/pagination")
+	public Page<Employee> getEmployeeWithPagination(@RequestParam int page,@RequestParam int size){
+		return service.getEmployeesWithPagination(page, size);
 	}
 	
 

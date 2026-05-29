@@ -1,5 +1,6 @@
 package com.employee.service;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.employee.entity.*;
@@ -8,6 +9,8 @@ import com.employee.repository.*;
 
 import java.util.*;
 
+//for pagination
+import org.springframework.data.domain.*;
 @Service
 public class EmployeeService {
 @Autowired
@@ -66,6 +69,12 @@ public class EmployeeService {
 		throw new ResourceNotFoundException("Employee Not Found with this location: "+location);
 	}
 		return employees;
+	}
+	
+	public Page<Employee> getEmployeesWithPagination(int page,int size){
+		Pageable pageable =PageRequest.of(page,size);
+		
+		return repository.findAll(pageable);
 	}
 	
 }
