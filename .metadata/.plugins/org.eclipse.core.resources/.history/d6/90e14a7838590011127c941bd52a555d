@@ -1,0 +1,29 @@
+package com.employee.service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.employee.entity.*;
+import com.employee.repository.*;
+import java.util.*;
+
+
+@Service
+public class EmployeeService {
+@Autowired
+	private EmployeeRepository repository;
+
+	//Add
+	public Employee saveEmployee(Employee employee) {
+		return repository.save(employee);
+	}
+	
+	//Get All Employee
+	public List<Employee> getAllEmployee(){
+		return repository.findAll();
+	}
+	//Get Employee By Id
+	public Employee getEmployeeById() {
+		return repository.findById(id).orElse(null);
+	}
+
+}

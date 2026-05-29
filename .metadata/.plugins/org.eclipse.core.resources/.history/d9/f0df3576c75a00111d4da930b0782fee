@@ -1,0 +1,9 @@
+//Without it:Every controller needs try-catch.
+package com.exception;
+
+
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+}

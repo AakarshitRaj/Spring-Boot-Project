@@ -1,0 +1,9 @@
+//Without it:Every controller needs try-catch.
+package com.exception;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+}

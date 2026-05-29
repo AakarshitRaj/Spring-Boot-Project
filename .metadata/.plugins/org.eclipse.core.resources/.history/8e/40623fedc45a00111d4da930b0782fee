@@ -1,0 +1,51 @@
+package com.employee.service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.employee.entity.*;
+import com.employee.repository.*;
+import java.util.*;
+
+
+@Service
+public class EmployeeService {
+@Autowired
+	private EmployeeRepository repository;
+
+	//Add
+	public Employee saveEmployee(Employee employee) {
+		return repository.save(employee);
+	}
+	
+	//Get All Employee
+	public List<Employee> getAllEmployee(){
+		return repository.findAll();
+	}
+	//Get Employee By Id
+	public Employee getEmployeeById(Long id) {
+		return repository.findById(id).orElseThrow(()->
+		ResourceNotFoundException("Employee Not Found with this id"+id);	
+		);
+	}
+	//Update Employee
+	public Employee updateEmployee(Long id,Employee employee) {
+		Employee existingEmployee = repository.findById(id).orElse(null);
+		
+		if(existingEmployee!=null) {
+			  existingEmployee.setName(employee.getName());
+		        existingEmployee.setRole(employee.getRole());
+		        existingEmployee.setLocation(employee.getLocation());
+		        existingEmployee.setSalary(employee.getSalary());
+
+		        return repository.save(existingEmployee);
+		    }
+
+		    return null;
+	}
+	
+	//Delete Employee
+	public void deleteEmployeeById(Long id) {
+		repository.deleteById(id);
+	}
+
+}
