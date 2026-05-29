@@ -23,7 +23,7 @@ public class Employee {
 	private String location;
 	
 	@NotBlank(message="Salary is required")
-	private String salary;
+	private Long salary;
 	
 	public Long getId() {
 		return id;
@@ -57,11 +57,11 @@ public class Employee {
 		this.location = location;
 	}
 
-	public String getSalary() {
+	public Long getSalary() {
 		return salary;
 	}
 
-	public void setSalary(String salary) {
+	public void setSalary(Long salary) {
 		this.salary = salary;
 	}
 
@@ -71,7 +71,7 @@ public class Employee {
 		
 	}
 	
-	public Employee(Long id, String name, String role, String location, String salary) {
+	public Employee(Long id, String name, String role, String location, Long salary) {
 		super();
 		this.id = id;
 		this.name = name;

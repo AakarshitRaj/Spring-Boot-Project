@@ -63,5 +63,17 @@ public class EmployeeController {
 		return service.getEmployeesWithPagination(page, size);
 	}
 	
+	//Sorting logic
+	@GetMapping("/sort/{field}")
+	public List<Employee> getEmployeeWithSorting(@PathVariable String field){
+		return service.getEmployeesWithSorting(field);
+	}
+	
+	//pagination + sorting
+	@GetMapping("/paginationAndSorting")
+	public Page<Employee> getEmployeeWithPaginationAndSorting(@RequestParam int page,@RequestParam int size,@RequestParam String field){
+		return service.getEmployeesWithPaginationAndSorting(page, size,field);
+	}
+	
 
 }

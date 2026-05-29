@@ -9,7 +9,7 @@ import com.employee.repository.*;
 
 import java.util.*;
 
-//for pagination
+//for pagination+sorting
 import org.springframework.data.domain.*;
 @Service
 public class EmployeeService {
@@ -71,10 +71,22 @@ public class EmployeeService {
 		return employees;
 	}
 	
+	//for pagination
 	public Page<Employee> getEmployeesWithPagination(int page,int size){
 		Pageable pageable =PageRequest.of(page,size);
 		
 		return repository.findAll(pageable);
 	}
 	
+	//for sorting
+	public List<Employee> getEmployeesWithSorting(String field){
+		return repository.findAll(Sort.by(Sort.Direction.ASC,field));
+	}
+	
+	//pagination+sorting
+	public Page<Employee> getEmployeesWithPaginationAndSorting(int page,int size,String field){
+		Pageable pageable =PageRequest.of(page,size,Sort.by(field));
+		
+		return repository.findAll(pageable);
+	}
 }
