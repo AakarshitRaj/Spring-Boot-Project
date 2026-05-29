@@ -44,5 +44,16 @@ public class EmployeeController {
 		service.deleteEmployeeById(id);
 		return "Deleted Successfully";
 	}
+	
+	@GetMapping("/location/{location}")
+	public List<Employee> getEmployeeByLocation(@PathVariable String location){
+		return service.getEmployeeByLocation(location);
+	}
+	
+	@GetMapping("/role/{role}")
+	public List<Employee> getEmployeeByRole(@PathVariable String role){
+		return service.getEmployeeByRole(role);
+	}
+	
 
 }

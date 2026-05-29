@@ -3,9 +3,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.employee.entity.*;
+import com.employee.exception.ResourceNotFoundException;
 import com.employee.repository.*;
-import java.util.*;
 
+import java.util.*;
 
 @Service
 public class EmployeeService {
@@ -23,7 +24,10 @@ public class EmployeeService {
 	}
 	//Get Employee By Id
 	public Employee getEmployeeById(Long id) {
-		return repository.findById(id).orElse(null);
+		return repository.findById(id).
+				orElseThrow(()->
+				new ResourceNotFoundException("Employee Not Found with this id: "+id));
+	//new keyword is used because ResourceNotFoundException is a class, not a method.
 	}
 	//Update Employee
 	public Employee updateEmployee(Long id,Employee employee) {
@@ -46,4 +50,22 @@ public class EmployeeService {
 		repository.deleteById(id);
 	}
 
+	public List<Employee> getEmployeeByRole(String role){
+		List<Employee> employees =repository.findByRole(role);
+		//because it give Multiple records
+		if(employees.isEmpty()) {
+		throw new ResourceNotFoundException("Employee Not Found with this role: "+role);
+	}
+		return employees;
+	}
+	
+	public List<Employee> getEmployeeByLocation(String location){
+		List<Employee> employees =repository.findByLocation(location);
+		//because it give Multiple records
+		if(employees.isEmpty()) {
+		throw new ResourceNotFoundException("Employee Not Found with this location: "+location);
+	}
+		return employees;
+	}
+	
 }
