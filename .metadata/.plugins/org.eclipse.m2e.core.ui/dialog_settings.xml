@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\USER\Desktop\SpringBoot\Employee-Management -DTO"/>
 			<item value="C:\Users\USER\Desktop\SpringBoot\Student-Management"/>
 		</list>
 		<list key="projectNameTemplate">
