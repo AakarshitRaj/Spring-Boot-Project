@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 //for pagination+sorting
 import org.springframework.data.domain.*;
 
+//For Logger
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 //@Service
 //public class EmployeeService {
@@ -148,40 +152,70 @@ import org.springframework.data.domain.*;
 
 @Service
 public class EmployeeService {
+	//For Logger
+	private static final Logger log =
+	        LoggerFactory.getLogger(EmployeeService.class);
 	
 	@Autowired
 	private EmployeeRepository repository;
 	public EmployeeResponseDTO saveEmployee(EmployeeRequestDTO dto) {
 		Employee employee=EmployeeMapper.convertToEntity(dto);
 		
+		
+		// Log before saving
+				log.info("Saving employee: {}", dto.getName());
+				
 		Employee savedEmployee=repository.save(employee);
+		
+		// Log after saving
+		log.info("Employee saved successfully with ID: {}",savedEmployee.getId());
 		
 		return EmployeeMapper.convertToDTO(savedEmployee);
 	}
 	
 	public List<EmployeeResponseDTO> getAllEmployee(){
-		return repository.findAll().stream()
+		//Log before fetching
+				log.info("Fetching employees");
+				
+				List<EmployeeResponseDTO> employees= repository.findAll().stream()
 									.map(EmployeeMapper::convertToDTO)
 									.collect(Collectors.toList());
+		//Log after fetching
+		 log.info("Employee found: {}", employees.size());
+		 return employees;
 	}
 	
 	public EmployeeResponseDTO getEmployeeById(Long id){
+		//Log before fetching
+		log.info("Fetching employee with ID: {}", id);
+		
 		Employee employee=repository.findById(id).orElseThrow(()->
 				new ResourceNotFoundException(
                         "Employee Not Found with this id: " + id));
-		
+		//Log after fetching
+		 log.info("Employee found: {}", employee.getName());
+		 
 		return EmployeeMapper.convertToDTO(employee);
 	}
 
 	public void deleteEmployeeById(Long id) {
+		//Log before deleting
+				log.info("Deleting employee with ID: {}", id);
+				
 		Employee employee=repository.findById(id).orElseThrow(()->
 		new ResourceNotFoundException(
                 "Employee Not Found with this id: " + id));
 		
 		repository.delete(employee);
+		
+		//Log after deleting
+		 log.info("Employee deleted successfully: {}", employee.getName());
 	}
 	
 	public EmployeeResponseDTO updateEmployee(Long id,EmployeeRequestDTO dto) {
+		//Log before updating
+		log.info("Updating employee with ID: {}", id);
+		
 		Employee employee=repository.findById(id).orElseThrow(()->
 		new ResourceNotFoundException(
                 "Employee Not Found with this id: " + id));
@@ -190,15 +224,32 @@ public class EmployeeService {
 			EmployeeMapper.updateEntityFromDTO(dto, employee);
 			Employee updatedEmployee=repository.save(employee);
 			
+			//Log after updated
+			 log.info("Employee updated successfully with ID: {}", updatedEmployee.getId());
+			
 			return EmployeeMapper.convertToDTO(updatedEmployee);
 	}
 	//Search By Role
 	public List<EmployeeResponseDTO> getEmployeeByRole(String role){
+		//Log fetching based on role
+				log.info("Fetching employee with Role: {}", role);
+				
 		List<Employee> employees =repository.findByRole(role);
 		//because it give Multiple records
 		if(employees.isEmpty()) {
+			//logger
+			 log.warn("No employee found for role: {}", role);
+			 
 		throw new ResourceNotFoundException("Employee Not Found with this role: "+role);
 	}
+		
+		//Log fetching employees based on role
+		log.info(
+			    "Employees fetched for role {} : {} record(s)",
+			    role,
+			    employees.size()
+			);
+		
 		return employees.stream()
 				.map(EmployeeMapper::convertToDTO)
 				.collect(Collectors.toList());
@@ -207,11 +258,22 @@ public class EmployeeService {
 //Search By Location
 	
 	public List<EmployeeResponseDTO> getEmployeeByLocation(String location){
+		//Log fetching based on role
+		log.info("Fetching employee with Location: {}", location);
+		
 		List<Employee> employees =repository.findByLocation(location);
 		//because it give Multiple records
 		if(employees.isEmpty()) {
 		throw new ResourceNotFoundException("Employee Not Found with this location: "+location);
 	}
+		
+		//Log fetched employees based on location
+		log.info(
+			    "Employees fetched for location {} : {} record(s)",
+			    location,
+			    employees.size()
+			);
+		 
 		return employees.stream()
 				.map(EmployeeMapper::convertToDTO)
 				.collect(Collectors.toList());
@@ -219,29 +281,58 @@ public class EmployeeService {
 	
 	//for pagination
 	public Page<EmployeeResponseDTO> getEmployeesWithPagination(int page,int size){
+		
 		Pageable pageable =PageRequest.of(page,size);
+		//Log fetching on page 
+		log.info("Fetching employee page: {}, size: {}", page, size);
 		
 		Page<Employee> employeePage =
                 repository.findAll(pageable);
-
+		
+		//Log fetched employees based on page with size
+		log.info("Employee fetched page: {}, size: {}", page, size);
+		 
         return employeePage.map(EmployeeMapper::convertToDTO);
 	}
 	
 	//for sorting
 	public List<EmployeeResponseDTO> getEmployeesWithSorting(String field){
-		return repository.findAll(Sort.by(Sort.Direction.ASC,field))
+		//Log Sorting employee based on field
+				log.info("Sorting employee based on :{}", field);
+				
+				List<EmployeeResponseDTO> employee= repository.findAll(Sort.by(Sort.Direction.ASC,field))
 				.stream()
                 .map(EmployeeMapper::convertToDTO)
                 .collect(Collectors.toList());
+				
+				//Log Sorted employee based on field
+				 log.info("Sorted employee based on :{}", field);
+				 
+				return employee;
 	}
 	
 	//pagination+sorting
 	public Page<EmployeeResponseDTO> getEmployeesWithPaginationAndSorting(int page,int size,String field){
 		Pageable pageable =PageRequest.of(page,size,Sort.by(field));
+		//Log Pagination Sorting employee based on field
+		log.info(
+			    "Fetching page: {}, size: {}, sorted by: {}",
+			    page,
+			    size,
+			    field
+			);
 		
 		Page<Employee> employeePage =
                 repository.findAll(pageable);
-
+		
+		//Log pagination and Sorted employee based on field
+		log.info(
+			    "Employees fetched page: {}, size: {}, sorted by: {}",
+			    page,
+			    size,
+			    field
+			);
+		 
         return employeePage.map(EmployeeMapper::convertToDTO);
 	}
 }
