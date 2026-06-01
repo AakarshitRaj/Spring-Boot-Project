@@ -24,4 +24,7 @@
     <fullyQualifiedTypeName name="com.employee.entity.Employee"/>
     <fullyQualifiedTypeName name="com.employee.DTO.EmployeeRequestDTO"/>
     <fullyQualifiedTypeName name="com.employee.mapper.EmployeeMapper"/>
+    <fullyQualifiedTypeName name="com.employee.response.ApiResponse"/>
+    <fullyQualifiedTypeName name="io.swagger.v3.oas.annotations.Operation"/>
+    <fullyQualifiedTypeName name="io.swagger.v3.oas.annotations.media.Schema"/>
 </qualifiedTypeNameHistroy>
