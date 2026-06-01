@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.employee.DTO.EmployeeRequestDTO;
 import com.employee.DTO.EmployeeResponseDTO;
+import com.employee.response.ApiResponse;
 import com.employee.service.EmployeeService;
 
 import jakarta.validation.*;
@@ -24,56 +25,108 @@ public class EmployeeController {
 	//POST API
 	@PostMapping
 	//@Valid used for validation
-	public EmployeeResponseDTO addEmployee(@Valid @RequestBody EmployeeRequestDTO employee) {
-		return service.saveEmployee(employee);
+	public ApiResponse<EmployeeResponseDTO> addEmployee(@Valid @RequestBody EmployeeRequestDTO dto) {
+		
+		EmployeeResponseDTO employee = service.saveEmployee(dto);
+		return new ApiResponse<>(
+				true,
+				 "Employee created successfully",
+				 employee
+				);
 	}
 	
 	//GET API
 	@GetMapping
-	public List<EmployeeResponseDTO> getEmployees(){
-		return service.getAllEmployee();
+	public ApiResponse<List<EmployeeResponseDTO>> getEmployees(){
+		List<EmployeeResponseDTO> employees = service.getAllEmployee();
+		return new ApiResponse<>(
+				true,
+				 "Employee fetched successfully",
+				 employees
+				);
+		
 	}
 	@GetMapping("/{id}")
-	public EmployeeResponseDTO getEmployeeById(@PathVariable Long id) {
-		return service.getEmployeeById(id);
+	public ApiResponse<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
+		EmployeeResponseDTO employee =service.getEmployeeById(id);
+		return new ApiResponse<>(
+				true,
+				 "Employee fetched successfully",
+				 employee
+				);
 	}
 	@PutMapping("/{id}")
-	public EmployeeResponseDTO updateEmployeeById(@PathVariable Long id,@RequestBody EmployeeRequestDTO employee) {
-		return service.updateEmployee(id,employee);
+	public ApiResponse<EmployeeResponseDTO> updateEmployeeById(@PathVariable Long id,@Valid @RequestBody EmployeeRequestDTO dto) {
+		EmployeeResponseDTO employee = service.updateEmployee(id,dto);
+		return new ApiResponse<>(
+				true,
+				 "Employee updated successfully",
+				 employee
+				);
+		
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deleteEmployeeById(@PathVariable Long id) {
+	public ApiResponse<String> deleteEmployeeById(@PathVariable Long id) {
 		service.deleteEmployeeById(id);
-		return "Deleted Successfully";
+		return new ApiResponse<>(
+	            true,
+	            "Employee deleted successfully",
+	            "Deleted"
+	    );
 	}
 	
 	@GetMapping("/location/{location}")
-	public List<EmployeeResponseDTO> getEmployeeByLocation(@PathVariable String location){
-		return service.getEmployeeByLocation(location);
+	public ApiResponse<List<EmployeeResponseDTO>> getEmployeeByLocation(@PathVariable String location){
+		List<EmployeeResponseDTO> employees=service.getEmployeeByLocation(location);
+		return new ApiResponse<>(
+	            true,
+	            "Employee fetched successfully based on location",
+	            employees
+	    );
 	}
 	
 	@GetMapping("/role/{role}")
-	public List<EmployeeResponseDTO> getEmployeeByRole(@PathVariable String role){
-		return service.getEmployeeByRole(role);
+	public ApiResponse<List<EmployeeResponseDTO>> getEmployeeByRole(@PathVariable String role){
+		List<EmployeeResponseDTO> employees= service.getEmployeeByRole(role);
+		return new ApiResponse<>(
+	            true,
+	            "Employee fetched successfully based on role",
+	            employees
+	    );
 	}
 	
 	//Pagination logic
 	@GetMapping("/pagination")
-	public Page<EmployeeResponseDTO> getEmployeeWithPagination(@RequestParam int page,@RequestParam int size){
-		return service.getEmployeesWithPagination(page, size);
+	public ApiResponse<Page<EmployeeResponseDTO>> getEmployeeWithPagination(@RequestParam int page,@RequestParam int size){
+		Page<EmployeeResponseDTO> p= service.getEmployeesWithPagination(page, size);
+		return new ApiResponse<>(
+	            true,
+	            "Employee fetched in pages",
+	            p
+	    );
 	}
 	
 	//Sorting logic
 	@GetMapping("/sort/{field}")
-	public List<EmployeeResponseDTO> getEmployeeWithSorting(@PathVariable String field){
-		return service.getEmployeesWithSorting(field);
+	public ApiResponse<List<EmployeeResponseDTO>> getEmployeeWithSorting(@PathVariable String field){
+		List<EmployeeResponseDTO> s= service.getEmployeesWithSorting(field);
+		return new ApiResponse<>(
+	            true,
+	            "Employee sorted",
+	            s
+	    );
 	}
 	
 	//pagination + sorting
 	@GetMapping("/paginationAndSorting")
-	public Page<EmployeeResponseDTO> getEmployeeWithPaginationAndSorting(@RequestParam int page,@RequestParam int size,@RequestParam String field){
-		return service.getEmployeesWithPaginationAndSorting(page, size,field);
+	public ApiResponse<Page<EmployeeResponseDTO>> getEmployeeWithPaginationAndSorting(@RequestParam int page,@RequestParam int size,@RequestParam String field){
+		Page<EmployeeResponseDTO> ps= service.getEmployeesWithPaginationAndSorting(page, size,field);
+		return new ApiResponse<>(
+	            true,
+	            "Employee fetched in pages and sorted",
+	            ps
+	    );
 	}
 	
 
