@@ -3,13 +3,10 @@
     <fullyQualifiedTypeName name="jakarta.persistence.Table"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
-    <fullyQualifiedTypeName name="com.employee.entity.Employee"/>
     <fullyQualifiedTypeName name="org.springframework.data.domain.Page"/>
     <fullyQualifiedTypeName name="org.springframework.data.domain.Sort.Direction"/>
     <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
     <fullyQualifiedTypeName name="com.employee.service.EmployeeService"/>
-    <fullyQualifiedTypeName name="com.employee.DTO.EmployeeResponseDTO"/>
-    <fullyQualifiedTypeName name="com.employee.DTO.EmployeeRequestDTO"/>
     <fullyQualifiedTypeName name="com.test.entity.Test"/>
     <fullyQualifiedTypeName name="com.test.repository.testRepository"/>
     <fullyQualifiedTypeName name="java.util.List"/>
@@ -23,4 +20,8 @@
     <fullyQualifiedTypeName name="jakarta.validation.Valid"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Entity"/>
+    <fullyQualifiedTypeName name="com.employee.DTO.EmployeeResponseDTO"/>
+    <fullyQualifiedTypeName name="com.employee.entity.Employee"/>
+    <fullyQualifiedTypeName name="com.employee.DTO.EmployeeRequestDTO"/>
+    <fullyQualifiedTypeName name="com.employee.mapper.EmployeeMapper"/>
 </qualifiedTypeNameHistroy>
