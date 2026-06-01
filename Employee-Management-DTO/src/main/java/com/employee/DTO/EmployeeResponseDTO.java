@@ -1,10 +1,25 @@
 package com.employee.DTO;
 import java.util.*;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+//swagger api
+@Schema(description = "Employee Request DTO")
+
 public class EmployeeResponseDTO {
 	 	private Long id;
-
+	 	//for swagger- it show what i have to write as json
+	 	@Schema(
+	 	        description = "Employee Name",
+	 	        example = "Rahul"
+	 	    )
+	 	
 		private String name;
-
+	 	
+	 	//for swagger
+	 	@Schema(
+	 	        description = "Employee Role",
+	 	        example = "Java Developer"
+	 	    )
 	    private String role;
 
 	    private String location;

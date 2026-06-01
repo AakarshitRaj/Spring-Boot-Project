@@ -12,6 +12,7 @@ import com.employee.DTO.EmployeeResponseDTO;
 import com.employee.response.ApiResponse;
 import com.employee.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.*;
 
 
@@ -36,6 +37,10 @@ public class EmployeeController {
 	}
 	
 	//GET API
+	@Operation(
+	        summary = "Get Employee",
+	        description = "Fetch employee details"
+	)
 	@GetMapping
 	public ApiResponse<List<EmployeeResponseDTO>> getEmployees(){
 		List<EmployeeResponseDTO> employees = service.getAllEmployee();
@@ -46,6 +51,11 @@ public class EmployeeController {
 				);
 		
 	}
+	//for swagger api
+	@Operation(
+	        summary = "Get Employee By ID",
+	        description = "Fetch employee details using employee ID"
+	)
 	@GetMapping("/{id}")
 	public ApiResponse<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
 		EmployeeResponseDTO employee =service.getEmployeeById(id);
