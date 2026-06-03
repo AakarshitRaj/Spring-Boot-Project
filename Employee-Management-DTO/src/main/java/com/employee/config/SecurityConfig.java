@@ -30,6 +30,13 @@ public class SecurityConfig {
 								.password(encoder.encode("admin123"))//bcrypting with encoder
 								.roles("ADMIN")
 								.build();
+//		For Viewing Password in Console
+			//		String encodedPassword = encoder.encode("admin123");
+			//		System.out.println("Encoded Password: " + encodedPassword);
+		
+		//To check BCrypt Property
+			//		System.out.println(encoder.encode("admin123"));
+			//		System.out.println(encoder.encode("admin123"));
 		
 		UserDetails user=User.builder()
 								.username("user")
