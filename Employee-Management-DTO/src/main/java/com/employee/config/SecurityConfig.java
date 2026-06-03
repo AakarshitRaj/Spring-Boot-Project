@@ -7,24 +7,33 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    //own user password
+	
+	//For BCrypt
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+    //For own user password
     
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-		UserDetails admin= User.withDefaultPasswordEncoder()
+    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {//encoder parameter used for bcrypt
+		UserDetails admin= User.builder()
 								.username("admin")
-								.password("admin123")
+								.password(encoder.encode("admin123"))//bcrypting with encoder
 								.roles("ADMIN")
 								.build();
 		
-		UserDetails user=User.withDefaultPasswordEncoder()
+		UserDetails user=User.builder()
 								.username("user")
-								.password("user123")
+								.password(encoder.encode("user123"))
 								.roles("USER")
 								.build();
 		
