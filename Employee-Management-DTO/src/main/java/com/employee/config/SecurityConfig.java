@@ -2,6 +2,7 @@ package com.employee.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -30,18 +31,40 @@ public class SecurityConfig {
 		return new InMemoryUserDetailsManager(admin,user);
 								
 	}
+    
+    //basic code for basic spring security
 	
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(
+//            HttpSecurity http) throws Exception {
+//
+//        http
+//            .csrf(csrf -> csrf.disable())
+//            .authorizeHttpRequests(auth -> auth
+//                    .anyRequest().authenticated()
+//            )
+//            .httpBasic(Customizer.withDefaults());
+//
+//        return http.build();
+//    }
+    
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
-
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                    .anyRequest().authenticated()
-            )
-            .httpBasic(Customizer.withDefaults());
-
-        return http.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    	http
+    		.csrf(csrf->csrf.disable())
+    		.authorizeHttpRequests(auth -> auth
+    				
+    				 .requestMatchers(HttpMethod.GET,"/employee/**").hasAnyRole("USER","ADMIN")
+    				 .requestMatchers(HttpMethod.POST,"/employee/**").hasAnyRole("ADMIN")
+    				 .requestMatchers(HttpMethod.PUT,"/employee/**").hasAnyRole("ADMIN")
+    				 .requestMatchers(HttpMethod.DELETE,"/employee/**").hasAnyRole("ADMIN")
+    				 
+    				 .anyRequest()
+    				 .authenticated()
+    				 )
+    		.httpBasic(Customizer.withDefaults());
+    			
+    				return http.build();
+	
     }
 }
