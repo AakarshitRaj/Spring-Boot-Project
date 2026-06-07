@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.employee.DTO.LoginRequestDTO;
 import com.employee.DTO.LoginResponseDTO;
+import com.employee.DTO.RefreshTokenRequestDTO;
+import com.employee.DTO.RefreshTokenResponseDTO;
 import com.employee.DTO.RegisterRequestDTO;
 import com.employee.service.AuthService;
 
@@ -24,5 +26,10 @@ public class AuthController {
 	        @RequestBody LoginRequestDTO dto) {
 
 	    return service.login(dto);
+	}
+	
+	@PostMapping("/refresh")
+	public RefreshTokenResponseDTO refreshToken(@RequestBody RefreshTokenRequestDTO request) {
+		return service.refreshToken(request);
 	}
 }
