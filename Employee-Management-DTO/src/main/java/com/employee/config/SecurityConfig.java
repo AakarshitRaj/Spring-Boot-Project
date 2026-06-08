@@ -103,7 +103,9 @@ public class SecurityConfig {
                             "/auth/login"
                     )
                     .permitAll()
-
+                    
+                    
+                    
                     .requestMatchers(
                             HttpMethod.GET,
                             "/employee/**"
@@ -127,6 +129,21 @@ public class SecurityConfig {
                             "/employee/**"
                     )
                     .hasRole("ADMIN")
+                    
+                    //for file upload
+                    .requestMatchers(
+                    	    HttpMethod.POST,
+                    	    "/files/uploads"
+                    	)
+                    	.hasRole("ADMIN")
+                   
+                    .requestMatchers(
+                    	        HttpMethod.GET,
+                    	        "/files/download/**")
+                    	.hasAnyRole("USER","ADMIN")	
+                    	
+//                    	.requestMatchers("/files/**")
+//                        .permitAll()
 
                     .anyRequest()
                     .authenticated()
