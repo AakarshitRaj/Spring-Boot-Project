@@ -30,6 +30,9 @@ private JwtUtil jwtUtil;
 @Autowired
 private RefreshTokenService refreshTokenService;
 
+@Autowired
+private EmailService emailService;
+
 public String register(RegisterRequestDTO dto) {
 	
 	if(repository.findByUsername(dto.getUsername()).isPresent()) {
@@ -43,6 +46,12 @@ public String register(RegisterRequestDTO dto) {
 	user.setEmail(dto.getEmail());
 	user.setRole(dto.getRole());
 	repository.save(user);
+	
+	emailService.sendEmail(
+	        user.getEmail(),
+	        "Welcome",
+	        "Registration Successful"
+	);
 	
 	
 	return "User Register Successfully";
