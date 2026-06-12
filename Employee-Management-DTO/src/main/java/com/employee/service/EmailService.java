@@ -22,4 +22,14 @@ public class EmailService {
 		
 		return "Email Sent Successfully";
 	}
+	
+	public void sendOtpEmail(String email,String otp) {
+		SimpleMailMessage message= new SimpleMailMessage();
+		
+		message.setTo(email);
+		message.setSubject("Password Reset OTP");
+		message.setText("Your OTP is"+ otp);
+		
+		mailSender.send(message);
+	}
 }
