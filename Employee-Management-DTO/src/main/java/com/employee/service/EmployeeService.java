@@ -232,10 +232,7 @@ public class EmployeeService {
 		 log.info("Employee deleted successfully: {}", employee.getName());
 	}
 	
-	@CachePut(
-	        value="employee",
-	        key="#id"
-	)
+	@CachePut(value="employees", key="#id")
 	public EmployeeResponseDTO updateEmployee(Long id,EmployeeRequestDTO dto) {
 		//Log before updating
 		log.info("Updating employee with ID: {}", id);
