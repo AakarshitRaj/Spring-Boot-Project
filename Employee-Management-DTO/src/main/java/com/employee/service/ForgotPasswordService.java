@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.employee.entity.Otp;
+//import com.employee.entity.Otp;
 import com.employee.entity.User;
 import com.employee.repository.*;
 
@@ -16,8 +16,11 @@ public class ForgotPasswordService {
 	@Autowired
 	private UserRepository userRepository;
 	
+//	@Autowired
+//	private OtpRepository otpRepository;
+	
 	@Autowired
-	private OtpRepository otpRepository;
+	private RedisOtpService redisOtpService;
 	
 	@Autowired
 	private EmailService emailService;
@@ -33,14 +36,17 @@ public class ForgotPasswordService {
 		
 		String otp=String.valueOf((int)(Math.random()*900000)+100000);
 		
-		Otp otpEntity=new Otp();
+//		Otp otpEntity=new Otp();
+//		
+//		otpEntity.setEmail(email);
+//		otpEntity.setOtp(otp);
+//		
+//		otpEntity.setExpiryTime(LocalDateTime.now().plusMinutes(5));
 		
-		otpEntity.setEmail(email);
-		otpEntity.setOtp(otp);
+		//otpRepository.save(otpEntity);
 		
-		otpEntity.setExpiryTime(LocalDateTime.now().plusMinutes(5));
-		
-		otpRepository.save(otpEntity);
+		//For Redis
+		redisOtpService.saveOtp(email, otp);
 		
 		emailService.sendOtpEmail(email,otp);
 		
@@ -49,18 +55,32 @@ public class ForgotPasswordService {
 	}
 	
 	public String verifyOtp(String email,String otp) {
-		Otp savedOtp = otpRepository.findByEmail(email)
-									.orElseThrow(()->
-										new RuntimeException("OTP Not Found")
-											);
+//		Otp savedOtp = otpRepository.findByEmail(email)
+//									.orElseThrow(()->
+//										new RuntimeException("OTP Not Found")
+//											);
+//		
+//		if(!savedOtp.getOtp().equals(otp)) {
+//			throw new RuntimeException("Invalid OTP");
+//		}
+//		
+//		if(savedOtp.getExpiryTime().isBefore(LocalDateTime.now())) {
+//			throw new RuntimeException("OTP Expired");
+//		}
+//		return "OTP Verified";
 		
-		if(!savedOtp.getOtp().equals(otp)) {
+		String savedOtp= redisOtpService.getOtp(email);
+		
+		if(savedOtp == null) {
+			throw new RuntimeException("OTP Expired");
+		}
+		
+		if(!savedOtp.equals(otp)) {
 			throw new RuntimeException("Invalid OTP");
 		}
 		
-		if(savedOtp.getExpiryTime().isBefore(LocalDateTime.now())) {
-			throw new RuntimeException("OTP Expired");
-		}
+		redisOtpService.deleteOtp(email);
+		
 		return "OTP Verified";
 	}
 	
