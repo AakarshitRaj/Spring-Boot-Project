@@ -1,11 +1,15 @@
 package com.employee.DTO;
+import java.io.Serializable;
 import java.util.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 //swagger api
 @Schema(description = "Employee Request DTO")
 
-public class EmployeeResponseDTO {
+public class EmployeeResponseDTO implements Serializable {
+	
+	   private static final long serialVersionUID = 1L;
+	   
 	 	private Long id;
 	 	//for swagger- it show what i have to write as json
 	 	@Schema(

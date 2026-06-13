@@ -1,37 +1,67 @@
 package com.employee.config;
 
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 @Configuration
+@EnableCaching
 public class RedisConfig {
 
-	@Bean
-	public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory factory){
-	     RedisTemplate<String,Object> template =
-	                new RedisTemplate<>();
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(
+            RedisConnectionFactory factory) {
 
-	        template.setConnectionFactory(factory);
+        RedisTemplate<String, Object> template =
+                new RedisTemplate<>();
 
-	        template.setKeySerializer(
-	                new StringRedisSerializer());
+        template.setConnectionFactory(factory);
 
-	        template.setHashKeySerializer(
-	                new StringRedisSerializer());
+        template.setKeySerializer(
+                new StringRedisSerializer());
 
-	        template.setValueSerializer(
-	                new StringRedisSerializer());
+        template.setHashKeySerializer(
+                new StringRedisSerializer());
 
-	        template.setHashValueSerializer(
-	                new StringRedisSerializer());
+        template.setValueSerializer(
+                new GenericJackson2JsonRedisSerializer());
 
-	        template.afterPropertiesSet();
+        template.setHashValueSerializer(
+                new GenericJackson2JsonRedisSerializer());
 
-	
-		
-		return template;
-	}
+        template.afterPropertiesSet();
+
+        return template;
+    }
+
+    @Bean
+    public CacheManager cacheManager(
+            RedisConnectionFactory factory) {
+
+        RedisCacheConfiguration config =
+                RedisCacheConfiguration.defaultCacheConfig()
+                        .serializeValuesWith(
+                                RedisSerializationContext
+                                        .SerializationPair
+                                        .fromSerializer(
+                                                new GenericJackson2JsonRedisSerializer()
+                                        )
+                        );
+
+        return RedisCacheManager
+                .builder(factory)
+                .cacheDefaults(config)
+                .build();
+    }
 }

@@ -1,6 +1,9 @@
 package com.employee.service;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import com.employee.DTO.EmployeeRequestDTO;
@@ -9,6 +12,7 @@ import com.employee.entity.*;
 import com.employee.exception.ResourceNotFoundException;
 import com.employee.mapper.EmployeeMapper;
 import com.employee.repository.*;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -158,6 +162,7 @@ public class EmployeeService {
 	
 	@Autowired
 	private EmployeeRepository repository;
+	@CachePut(value = "employees", key = "#result.id")
 	public EmployeeResponseDTO saveEmployee(EmployeeRequestDTO dto) {
 		Employee employee=EmployeeMapper.convertToEntity(dto);
 		
@@ -185,7 +190,17 @@ public class EmployeeService {
 		 return employees;
 	}
 	
+	//for redis cache
+	@Cacheable(
+	        value="employee",
+	        key="#id"
+	)
 	public EmployeeResponseDTO getEmployeeById(Long id){
+		
+		 System.out.println(
+		            "Fetching from Database");
+
+		 
 		//Log before fetching
 		log.info("Fetching employee with ID: {}", id);
 		
@@ -198,6 +213,11 @@ public class EmployeeService {
 		return EmployeeMapper.convertToDTO(employee);
 	}
 
+	@CacheEvict(
+	        value="employee",
+	        key="#id"
+	)
+	
 	public void deleteEmployeeById(Long id) {
 		//Log before deleting
 				log.info("Deleting employee with ID: {}", id);
@@ -212,6 +232,10 @@ public class EmployeeService {
 		 log.info("Employee deleted successfully: {}", employee.getName());
 	}
 	
+	@CachePut(
+	        value="employee",
+	        key="#id"
+	)
 	public EmployeeResponseDTO updateEmployee(Long id,EmployeeRequestDTO dto) {
 		//Log before updating
 		log.info("Updating employee with ID: {}", id);
